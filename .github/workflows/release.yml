@@ -1,0 +1,68 @@
+name: ReleaseCI
+on:
+  release:
+    types: [published]
+env:
+  FUNCTION_NAME: Youtube Downloader
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get Python version
+        id: get_python_version
+        run: |
+          # Like: 3.9.13
+          PYTHON_VERSION=$(cat .python-version)
+          echo "PYTHON_VERSION=${PYTHON_VERSION}" >> "$GITHUB_OUTPUT"
+          echo Python version is ${PYTHON_VERSION} :snake: >> $GITHUB_STEP_SUMMARY
+
+      - name: Set up Python ${{  steps.get_python_version.outputs.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{  steps.get_python_version.outputs.PYTHON_VERSION }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{  steps.get_python_version.outputs.PYTHON_VERSION }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{  steps.get_python_version.outputs.PYTHON_VERSION }}-
+      - name: Install pip dependencies
+        run: |
+          # project requirements
+          if [ -f requirements.txt ]; then
+            pip --disable-pip-version-check install -r requirements.txt
+          fi
+          # ci/cd requirements
+          pip --disable-pip-version-check install black flake8
+
+      - name: Release the package
+        run: bash ./.github/release_scripts/release.sh ${FUNCTION_NAME}-python${{  steps.get_python_version.outputs.PYTHON_VERSION }}-${{ github.ref_name }}-${{ matrix.os }}.zip "${{matrix.os }}"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FUNCTION_NAME }}-${{ github.ref_name }}
+          path: ./${{ matrix.os }}/${{ env.FUNCTION_NAME }}-python${{  steps.get_python_version.outputs.PYTHON_VERSION }}-${{ github.ref_name }}-${{ matrix.os }}.zip
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.FUNCTION_NAME }}-${{ github.ref_name }}
+          path: artifacts/
+
+      - name: Upload assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # generate a list of files to be attached, ATTACHMENTS will look something like
+          # -a file1 -a file2
+          for artifact in $(ls artifacts/*${{matrix.os }}*); do ATTACHMENTS="${ATTACHMENTS} -a ${artifact}"; done;
+          # attach artifacts to the release
+          hub release edit -m "" ${{ github.ref_name }} ${ATTACHMENTS}
