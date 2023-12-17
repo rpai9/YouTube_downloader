@@ -3,7 +3,7 @@ on:
   release:
     types: [published]
 env:
-  FUNCTION_NAME: Youtube Downloader
+  FUNCTION_NAME: youtube_converter
 jobs:
   build:
     runs-on: ${{ matrix.os }}
