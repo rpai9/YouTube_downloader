@@ -5,7 +5,6 @@ import ssl
 import stat
 import subprocess
 import sys
-from pathlib import Path
 
 import pytube
 
@@ -55,14 +54,10 @@ def certificate_install():
     Refer this doc.,
     https://github.com/python/cpython/blob/main/Mac/BuildScript/resources/install_certificates.command
     """
-    openssl_dir, openssl_cafile = os.path.split(
-        ssl.get_default_verify_paths().openssl_cafile
-    )
+    openssl_dir, openssl_cafile = os.path.split(ssl.get_default_verify_paths().openssl_cafile)
 
     print(" -- pip install --upgrade certifi")
-    subprocess.check_call(
-        [sys.executable, "-E", "-s", "-m", "pip", "install", "--upgrade", "certifi"]
-    )
+    subprocess.check_call([sys.executable, "-E", "-s", "-m", "pip", "install", "--upgrade", "certifi"])
 
     import certifi
 
@@ -79,6 +74,7 @@ def certificate_install():
     print(" -- setting permissions")
     os.chmod(openssl_cafile, STAT_0o775)
     print(" -- update complete")
+
 
 def is_path_exists_or_creatable():
     """Function to check to see if a path can be created/ if one already exits
@@ -104,15 +100,11 @@ def video_convertor(path):
         path (string): Path where the video needs to be downloaded.
     """
     try:
-        path = args.output_path if args.output_path is not None and is_path_exists_or_creatable()  else args.output_path
-        only_audio = (
-            True
-            if args.only_audio is not None and args.only_audio.lower() == "y"
-            else False
-        )
+        path = args.output_path if args.output_path is not None and is_path_exists_or_creatable() else args.output_path
+        only_audio = True if args.only_audio is not None and args.only_audio.lower() == "y" else False
         stream = pytube.YouTube(args.youtube_url).streams.filter(only_audio=only_audio)
         stream[0].download(path)
-        print(f"Successfully converted the stream")
+        print("Successfully converted the stream")
     except Exception as E:
         print(f"Error Converting the video - {E}")
 
