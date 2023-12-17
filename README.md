@@ -2,9 +2,9 @@
 
 The YouTube Video Converter is a user-friendly utility designed to seamlessly convert and download either the audio or video version of content posted on the YouTube website. It operates with the explicit intention of respecting the rights and permissions of the original publishers. The author of this script unequivocally discourages any form of piracy.
 
-Our utility emphasizes responsible usage, ensuring that users only download videos with the explicit consent of the original content creators. It upholds ethical standards, aiming to foster a respectful environment for content consumption.
+This utility emphasizes responsible usage, ensuring that users only download videos with the explicit consent of the original content creators. It upholds ethical standards, aiming to foster a respectful environment for content consumption.
 
-By using this tool, you are supporting the work of content creators while enjoying the flexibility to access and store your favorite content in a format that suits your preferences. It's our commitment to ethical practices that sets this utility apart, providing users with a reliable and conscientious solution for their video and audio conversion needs.
+By using this tool, you are supporting the work of content creators while enjoying the flexibility to access and store your favorite content in a format that suits your preferences. It's my commitment to ethical practices that sets this utility apart, providing users with a reliable and conscientious solution for their video and audio conversion needs.
 
 
 ## Usage
