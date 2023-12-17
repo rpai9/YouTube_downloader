@@ -6,7 +6,7 @@ build_path=$2
 pip install pyinstaller
 
 # Create a zip of package. (main-zip)
-pyinstaller youtube_conv.py --onefile
+pyinstaller youtube_converter.py --onefile
 zip -rm $local_file_path dist/ build/ youtube_converter.spec
 
 # Create a directory called build
