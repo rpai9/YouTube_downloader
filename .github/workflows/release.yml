@@ -67,6 +67,6 @@ jobs:
           # attach artifacts to the release
           # hub release edit -m "" ${{ github.ref_name }} ${ATTACHMENTS}
 
-          for f in $(find . -name '*.zip'); do
+          for f in $(ls artifacts/*${{matrix.os }}*); do
             gh release upload ${{ github.ref_name }} $f
           done
