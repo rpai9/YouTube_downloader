@@ -63,6 +63,6 @@ jobs:
         run: |
           # generate a list of files to be attached, ATTACHMENTS will look something like
           # -a file1 -a file2
-          for artifact in $(ls artifacts/*${{matrix.os }}*); do ATTACHMENTS="${ATTACHMENTS} -a ${artifact}"; done;
+          # for artifact in $(ls artifacts/*${{matrix.os }}*); do ATTACHMENTS="${ATTACHMENTS} -a ${artifact}"; done;
           # attach artifacts to the release
-          gh release create ${{ github.ref_name }} ${ATTACHMENTS}
+          gh release create ${{ github.ref_name }} ./${{ matrix.os }}/${{ env.FUNCTION_NAME }}-python${{  steps.get_python_version.outputs.PYTHON_VERSION }}-${{ github.ref_name }}-${{ matrix.os }}.zip
