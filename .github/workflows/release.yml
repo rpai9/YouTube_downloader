@@ -61,8 +61,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-  
+          # generate a list of files to be attached, ATTACHMENTS will look something like
+          # -a file1 -a file2
+          # for artifact in $(ls artifacts/*${{matrix.os }}*); do ATTACHMENTS="${ATTACHMENTS} -a ${artifact}"; done;
+          # attach artifacts to the release
+          # hub release edit -m "" ${{ github.ref_name }} ${ATTACHMENTS}
 
           for f in $(find . -name $(ls artifacts/*${{matrix.os }}*)); do
-            gh release upload ${{ steps.release.outputs.tag_name }} $f
+            gh release upload ${{ github.ref_name }} $f
           done
