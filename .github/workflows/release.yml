@@ -65,4 +65,8 @@ jobs:
           # -a file1 -a file2
           # for artifact in $(ls artifacts/*${{matrix.os }}*); do ATTACHMENTS="${ATTACHMENTS} -a ${artifact}"; done;
           # attach artifacts to the release
-          gh release upload ${{ github.ref_name }} ${ATTACHMENTS}
+          # hub release edit -m "" ${{ github.ref_name }} ${ATTACHMENTS}
+
+          for f in $(ls artifacts/*${{matrix.os }}*); do
+            gh release upload ${{ github.ref_name }} $f
+          done
