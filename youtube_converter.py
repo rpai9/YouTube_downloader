@@ -6,7 +6,7 @@ import stat
 import subprocess
 import sys
 
-import pytube
+import pytubefix
 
 # arg parser
 parser = argparse.ArgumentParser()
@@ -102,10 +102,11 @@ def video_convertor(path):
     try:
         path = args.output_path if args.output_path is not None and is_path_exists_or_creatable() else args.output_path
         only_audio = True if args.only_audio is not None and args.only_audio.lower() == "y" else False
-        stream = pytube.YouTube(args.youtube_url).streams.filter(only_audio=only_audio)
+        stream = pytubefix.YouTube(args.youtube_url).streams.filter(only_audio=only_audio)
         stream[0].download(path)
         print("Successfully converted the stream")
     except Exception as E:
+        raise
         print(f"Error Converting the video - {E}")
 
 
